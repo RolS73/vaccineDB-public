@@ -1,5 +1,4 @@
-VaccineDB is a Spring application to help management and documentation of the available vaccines in registered vaccination points, and
-also to help track of patients that are to be or already were administered one of the accessible vaccines.
+VaccineDB is a Spring application to help management and documentation of the available vaccines in registered vaccination points, and also to help track of patients that are to be or already were administered one of the accessible vaccines.
 
 
 The application has 4 main model classes, these are:

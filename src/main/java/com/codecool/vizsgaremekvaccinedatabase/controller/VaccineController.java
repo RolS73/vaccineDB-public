@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/vaccines")
+@RequestMapping(value = "/vaccine")
 public class VaccineController {
 
     VaccineService service;

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/patients")
+@RequestMapping(value = "/patient")
 public class PatientController {
 
     PatientService service;

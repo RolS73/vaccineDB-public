@@ -22,6 +22,11 @@ public class VaccinationPointController {
         return service.save(s);
     }
 
+    @PutMapping
+    public VaccinationPoint update(@RequestBody VaccinationPoint s) {
+        return service.update(s);
+    }
+
     @GetMapping
     public List<VaccinationPoint> findAll() {
         return service.findAll();

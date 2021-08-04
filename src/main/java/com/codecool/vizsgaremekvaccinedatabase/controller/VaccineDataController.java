@@ -1,39 +1,39 @@
 package com.codecool.vizsgaremekvaccinedatabase.controller;
 
-import com.codecool.vizsgaremekvaccinedatabase.model.Vaccine;
-import com.codecool.vizsgaremekvaccinedatabase.service.VaccineService;
+import com.codecool.vizsgaremekvaccinedatabase.model.VaccineData;
+import com.codecool.vizsgaremekvaccinedatabase.service.VaccineDataService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/vaccines")
-public class VaccineController {
+@RequestMapping(value = "/vaccine_data")
+public class VaccineDataController {
 
-    VaccineService service;
+    VaccineDataService service;
 
-    public VaccineController(VaccineService service) {
+    public VaccineDataController(VaccineDataService service) {
         this.service = service;
     }
 
     @PostMapping
-    public Vaccine save(@RequestBody Vaccine s) {
+    public VaccineData save(@RequestBody VaccineData s) {
         return service.save(s);
     }
 
     @PutMapping
-    public Vaccine update(@RequestBody Vaccine s) {
+    public VaccineData update(@RequestBody VaccineData s) {
         return service.update(s);
     }
 
     @GetMapping
-    public List<Vaccine> findAll() {
+    public List<VaccineData> findAll() {
         return service.findAll();
     }
 
     @GetMapping(value = "/{id}")
-    public Optional<Vaccine> findById(@PathVariable Long id) {
+    public Optional<VaccineData> findById(@PathVariable Long id) {
         return service.findById(id);
     }
 

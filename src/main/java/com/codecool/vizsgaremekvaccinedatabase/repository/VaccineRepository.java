@@ -1,7 +1,7 @@
 package com.codecool.vizsgaremekvaccinedatabase.repository;
 
-import com.codecool.vizsgaremekvaccinedatabase.model.VaccineData;
+import com.codecool.vizsgaremekvaccinedatabase.model.Vaccine;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface VaccineRepository extends JpaRepository<VaccineData, Long> {
+public interface VaccineRepository extends JpaRepository<Vaccine, Long> {
 }

@@ -1,34 +1,34 @@
 package com.codecool.vizsgaremekvaccinedatabase.service;
 
-import com.codecool.vizsgaremekvaccinedatabase.model.Vaccine;
-import com.codecool.vizsgaremekvaccinedatabase.repository.VaccineRepository;
+import com.codecool.vizsgaremekvaccinedatabase.model.VaccineData;
+import com.codecool.vizsgaremekvaccinedatabase.repository.VaccineDataRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class VaccineService {
+public class VaccineDataService {
 
-    VaccineRepository repository;
+    VaccineDataRepository repository;
 
-    public VaccineService(VaccineRepository repository) {
+    public VaccineDataService(VaccineDataRepository repository) {
         this.repository = repository;
     }
 
-    public List<Vaccine> findAll() {
+    public List<VaccineData> findAll() {
         return repository.findAll();
     }
 
-    public Vaccine save(Vaccine s) {
+    public VaccineData save(VaccineData s) {
         return repository.save(s);
     }
 
-    public Vaccine update(Vaccine s) {
+    public VaccineData update(VaccineData s) {
         return repository.save(s);
     }
 
-    public Optional<Vaccine> findById(Long aLong) {
+    public Optional<VaccineData> findById(Long aLong) {
         return repository.findById(aLong);
     }
 

@@ -18,8 +18,11 @@ public class PatientController {
     }
 
     @PostMapping
-    public Patient save(@RequestBody Patient s) {
-        return service.save(s);
+    public Patient save(@RequestBody Patient s) { return service.save(s); }
+
+    @PutMapping
+    public Patient update(@RequestBody Patient s) {
+        return service.update(s);
     }
 
     @GetMapping

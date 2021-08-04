@@ -20,16 +20,16 @@ public class PatientService {
         return repository.save(s);
     }
 
+    public Patient update(Patient s) {
+        return repository.save(s);
+    }
+
     public List<Patient> findAll() {
         return repository.findAll();
     }
 
     public Optional<Patient> findById(Long aLong) {
         return repository.findById(aLong);
-    }
-
-    public void update(Patient patient) {
-
     }
 
     public void deleteById(Long aLong) {

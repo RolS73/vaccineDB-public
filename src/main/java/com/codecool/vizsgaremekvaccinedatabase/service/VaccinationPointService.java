@@ -20,16 +20,16 @@ public class VaccinationPointService {
         return repository.save(s);
     }
 
+    public VaccinationPoint update(VaccinationPoint s) {
+        return repository.save(s);
+    }
+
     public List<VaccinationPoint> findAll() {
         return repository.findAll();
     }
 
     public Optional<VaccinationPoint> findById(Long aLong) {
         return repository.findById(aLong);
-    }
-
-    public void update() {
-
     }
 
     public void deleteById(Long aLong) {

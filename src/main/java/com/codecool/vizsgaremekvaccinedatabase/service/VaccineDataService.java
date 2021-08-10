@@ -41,7 +41,7 @@ public class VaccineDataService {
     }
 
     public void deleteByName(String name) {
-        vaccinationPointRepository.deleteByName(name);
+        vaccinationPointRepository.deleteFromStockByName(name);
         vaccineRepository.deleteByName(name);
         repository.deleteById(name);
     }

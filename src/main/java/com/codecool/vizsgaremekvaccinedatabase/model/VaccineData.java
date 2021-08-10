@@ -2,7 +2,10 @@ package com.codecool.vizsgaremekvaccinedatabase.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,17 +13,18 @@ import java.util.List;
 public class VaccineData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    Long id;
-
     String name;
+
     int dosesNeeded;
     int minAge;
 
-    @OneToMany(mappedBy = "vaccine", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "vaccine", cascade = { CascadeType.REMOVE, CascadeType.PERSIST})
     @JsonIgnore
     private List<Patient> patients = new ArrayList<>();
+
+    @OneToMany(mappedBy = "vaccineData", cascade = { CascadeType.REMOVE, CascadeType.PERSIST})
+    @JsonIgnore
+    private List<Vaccine> vaccines = new ArrayList<>();
 
     public VaccineData() {}
 
@@ -30,12 +34,12 @@ public class VaccineData {
         this.minAge = min_age;
     }
 
-    public Long getId() {
-        return id;
+    public List<Vaccine> getVaccines() {
+        return vaccines;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setVaccines(List<Vaccine> vaccines) {
+        this.vaccines = vaccines;
     }
 
     public String getName() {

@@ -1,19 +1,27 @@
 package com.codecool.vizsgaremekvaccinedatabase.service;
 
 import com.codecool.vizsgaremekvaccinedatabase.model.VaccineData;
+import com.codecool.vizsgaremekvaccinedatabase.repository.VaccinationPointRepository;
 import com.codecool.vizsgaremekvaccinedatabase.repository.VaccineDataRepository;
+import com.codecool.vizsgaremekvaccinedatabase.repository.VaccineRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class VaccineDataService {
 
     VaccineDataRepository repository;
+    VaccineRepository vaccineRepository;
+    VaccinationPointRepository vaccinationPointRepository;
 
-    public VaccineDataService(VaccineDataRepository repository) {
+    public VaccineDataService(VaccineDataRepository repository, VaccineRepository vaccineRepository, VaccinationPointRepository vaccinationPointRepository) {
         this.repository = repository;
+        this.vaccineRepository = vaccineRepository;
+        this.vaccinationPointRepository = vaccinationPointRepository;
     }
 
     public List<VaccineData> findAll() {
@@ -28,11 +36,13 @@ public class VaccineDataService {
         return repository.save(s);
     }
 
-    public Optional<VaccineData> findById(Long aLong) {
-        return repository.findById(aLong);
+    public Optional<VaccineData> findByName(String vaccineName) {
+        return repository.findById(vaccineName);
     }
 
-    public void deleteById(Long aLong) {
-        repository.deleteById(aLong);
+    public void deleteByName(String name) {
+        vaccinationPointRepository.deleteByName(name);
+        vaccineRepository.deleteByName(name);
+        repository.deleteById(name);
     }
 }

@@ -32,13 +32,13 @@ public class VaccineDataController {
         return service.findAll();
     }
 
-    @GetMapping(value = "/{id}")
-    public Optional<VaccineData> findById(@PathVariable Long id) {
-        return service.findById(id);
+    @GetMapping(value = "/{vaccineName}")
+    public Optional<VaccineData> findByName(@PathVariable String vaccineName) {
+        return service.findByName(vaccineName);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public void deleteById(@PathVariable Long id) {
-        service.deleteById(id);
+    @DeleteMapping(value = "/{vaccineName}")
+    public void deleteById(@PathVariable String vaccineName) {
+        service.deleteByName(vaccineName);
     }
 }

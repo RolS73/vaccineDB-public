@@ -1,25 +1,18 @@
 package com.codecool.vizsgaremekvaccinedatabase.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     Long id;
 
-    @NotBlank
     private String fullName;
 
-    @NotBlank
     private int age;
 
-    @NotBlank
     private String gender;
 
     private boolean isVaccinated;

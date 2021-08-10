@@ -1,9 +1,6 @@
 package com.codecool.vizsgaremekvaccinedatabase.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
@@ -11,22 +8,17 @@ public class VaccinationPoint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     Long id;
 
-    @NotBlank
     String name;
 
-    @NotBlank
     String region;
 
-    @NotBlank
     String city;
 
-    @NotBlank
     String address;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     List<Vaccine> vaccineStock;
 
     public VaccinationPoint() {}

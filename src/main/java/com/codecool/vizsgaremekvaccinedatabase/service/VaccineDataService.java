@@ -17,11 +17,13 @@ public class VaccineDataService {
     VaccineDataRepository repository;
     VaccineRepository vaccineRepository;
     VaccinationPointRepository vaccinationPointRepository;
+    VaccinationPointService vaccinationPointService;
 
-    public VaccineDataService(VaccineDataRepository repository, VaccineRepository vaccineRepository, VaccinationPointRepository vaccinationPointRepository) {
+    public VaccineDataService(VaccineDataRepository repository, VaccineRepository vaccineRepository, VaccinationPointRepository vaccinationPointRepository, VaccinationPointService vaccinationPointService) {
         this.repository = repository;
         this.vaccineRepository = vaccineRepository;
         this.vaccinationPointRepository = vaccinationPointRepository;
+        this.vaccinationPointService = vaccinationPointService;
     }
 
     public List<VaccineData> findAll() {

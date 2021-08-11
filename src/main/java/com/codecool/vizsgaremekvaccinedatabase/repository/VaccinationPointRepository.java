@@ -8,11 +8,24 @@ import org.springframework.data.repository.query.Param;
 
 public interface VaccinationPointRepository extends JpaRepository<VaccinationPoint, Long> {
 
+    /*DELETE FROM VACCINATION_POINT_VACCINE_STOCK vs
+    WHERE EXISTS(
+            SELECT *
+            FROM VACCINE v
+            JOIN VACCINE_DATA vd
+            ON vs.Vaccine_Stock_Id = v.id
+            AND v.VACCINE_DATA_NAME = 'Moderna'
+    )*/
+
     @Modifying
-    @Query(value = "SELECT FROM VACCINATION_POINT_VACCINE_STOCK vs " +
-            "INNER JOIN VACCINE v " +
-            "ON vs.Vaccine_Stock_Id = v.id " +
-            "AND v.VACCINE_DATA_NAME = :name"
+    @Query(value = "DELETE FROM VACCINATION_POINT_VACCINE_STOCK vs " +
+                    "WHERE EXISTS(" +
+                    "SELECT * " +
+                    "FROM VACCINE v " +
+                    "JOIN VACCINE_DATA vd " +
+                    "ON vs.Vaccine_Stock_Id = v.id " +
+                    "AND v.VACCINE_DATA_NAME = :name" +
+            ")"
             ,nativeQuery = true)
     void deleteFromStockByName(@Param("name") String name);
 }

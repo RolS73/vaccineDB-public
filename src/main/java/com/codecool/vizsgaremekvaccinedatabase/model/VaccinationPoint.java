@@ -18,7 +18,7 @@ public class VaccinationPoint {
 
     String address;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany()
     List<Vaccine> vaccineStock;
 
     public VaccinationPoint() {}

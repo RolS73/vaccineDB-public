@@ -18,7 +18,7 @@ public class VaccineData {
     int dosesNeeded;
     int minAge;
 
-    @OneToMany(mappedBy = "vaccine", cascade = { CascadeType.REMOVE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "vaccine", cascade = { CascadeType.DETACH, CascadeType.PERSIST})
     @JsonIgnore
     private List<Patient> patients = new ArrayList<>();
 

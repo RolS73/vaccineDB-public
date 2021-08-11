@@ -1,6 +1,7 @@
 package com.codecool.vizsgaremekvaccinedatabase.service;
 
 import com.codecool.vizsgaremekvaccinedatabase.model.VaccineData;
+import com.codecool.vizsgaremekvaccinedatabase.repository.PatientRepository;
 import com.codecool.vizsgaremekvaccinedatabase.repository.VaccinationPointRepository;
 import com.codecool.vizsgaremekvaccinedatabase.repository.VaccineDataRepository;
 import com.codecool.vizsgaremekvaccinedatabase.repository.VaccineRepository;
@@ -17,13 +18,13 @@ public class VaccineDataService {
     VaccineDataRepository repository;
     VaccineRepository vaccineRepository;
     VaccinationPointRepository vaccinationPointRepository;
-    VaccinationPointService vaccinationPointService;
+    PatientRepository patientRepository;
 
-    public VaccineDataService(VaccineDataRepository repository, VaccineRepository vaccineRepository, VaccinationPointRepository vaccinationPointRepository, VaccinationPointService vaccinationPointService) {
+    public VaccineDataService(VaccineDataRepository repository, VaccineRepository vaccineRepository, VaccinationPointRepository vaccinationPointRepository, PatientRepository patientRepository) {
         this.repository = repository;
         this.vaccineRepository = vaccineRepository;
         this.vaccinationPointRepository = vaccinationPointRepository;
-        this.vaccinationPointService = vaccinationPointService;
+        this.patientRepository = patientRepository;
     }
 
     public List<VaccineData> findAll() {
@@ -45,6 +46,10 @@ public class VaccineDataService {
     public void deleteByName(String name) {
         vaccinationPointRepository.deleteFromStockByName(name);
         vaccineRepository.deleteByName(name);
+        patientRepository.findAll()
+                .stream()
+                .filter(patient -> patient.getVaccine() != null && patient.getVaccine().getName().equals(name))
+                .forEach(patient -> patient.setVaccine(null));
         repository.deleteById(name);
     }
 }

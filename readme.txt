@@ -20,23 +20,23 @@ The "Vaccination Point" class is to register the locations where vaccines are st
 The endpoints for the application and their usage are the following:
 
 
-​GET 			/vaccine			-Lists every available TYPE of vaccine
+​GET 			/vaccine			-Lists every available vaccine
 PUT			​/vaccine			-Updates an entry or saves a new one with input data.
-POST ​			/vaccine			-Registers a new TYPE of vaccine
-GET			​/vaccine​/{id}			-Returns the vaccine TYPE of the input id.
-DELETE			​/vaccines/{id}			-Deletes the vaccine TYPE of the input id.
+POST ​			/vaccine			-Registers a new vaccine
+GET			​/vaccine​/{id}			-Returns the vaccine of the input id.
+DELETE			​/vaccines/{id}			-Deletes the vaccine of the input id.
 
-GET 			​/vaccine_data			-Lists every available Vaccine.
+GET 			​/vaccine_data			-Lists every available Vaccine type.
 PUT			​/vaccine_data			-Updates an entry or saves a new one with input data.
-POST 			/vaccine_data			-Inserts a new vaccine into the database.
-GET 			/vaccine_data​/{id}		-Returns the vaccine with the selected id.
-DELETE 			/vaccine_data​/{id}		-Deletes the vaccine with the selected id.
+POST 			/vaccine_data			-Inserts a new vaccine type into the database.
+GET 			/vaccine_data​/{id}		-Returns the vaccine type with the selected id.
+DELETE 			/vaccine_data​/{id}		-Deletes the vaccine type with the selected id, and removes all instances/references to it in the database.
 
 GET			/vaccinationpoint		-Lists every registered vaccination point.
 PUT			​/vaccinationpoint		-Updates an entry or saves a new one with input data.	
 POST			​/vaccinationpoint		-Registers a new vaccination point.
 GET			​/vaccinationpoint​/{id}		-Returns the vaccination point of the selected id.	
-DELETE			/vaccinationpoints/{id}		-Deletes the vaccination point of the selected id.
+DELETE			/vaccinationpoints/{id}		-Deletes the vaccination point of the selected id, and removes its stored vaccines from the database.
 
 GET			/patient			-Returns all patients registered in the database.
 PUT			​/patient			-Updates an entry or saves a new one with input data.

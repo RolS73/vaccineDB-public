@@ -10,7 +10,7 @@ import java.util.Optional;
 @Service
 public class VaccineService {
 
-    VaccineRepository repository;
+    private final VaccineRepository repository;
 
     public VaccineService(VaccineRepository repository) {
         this.repository = repository;

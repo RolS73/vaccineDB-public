@@ -1,7 +1,10 @@
 package com.codecool.vizsgaremekvaccinedatabase.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class VaccinationPoint {
@@ -10,12 +13,16 @@ public class VaccinationPoint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @NotBlank
     String name;
 
+    @NotBlank
     String region;
 
+    @NotBlank
     String city;
 
+    @NotBlank
     String address;
 
     @OneToMany()
@@ -23,9 +30,18 @@ public class VaccinationPoint {
 
     public VaccinationPoint() {}
 
-    public VaccinationPoint(String name, String state, String address, List<Vaccine> vaccineStock) {
+    public VaccinationPoint(String name, String state, String city, String address) {
         this.name = name;
         this.region = state;
+        this.city = city;
+        this.address = address;
+        this.vaccineStock = new ArrayList<>();
+    }
+
+    public VaccinationPoint(String name, String state, String city, String address, List<Vaccine> vaccineStock) {
+        this.name = name;
+        this.region = state;
+        this.city = city;
         this.address = address;
         this.vaccineStock = vaccineStock;
     }
@@ -86,5 +102,18 @@ public class VaccinationPoint {
                 ", address='" + address + '\'' +
                 ", vaccineStock=" + vaccineStock +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VaccinationPoint that = (VaccinationPoint) o;
+        return name.equals(that.name) && region.equals(that.region) && city.equals(that.city) && address.equals(that.address) && Objects.equals(vaccineStock, that.vaccineStock);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, region, city, address, vaccineStock);
     }
 }

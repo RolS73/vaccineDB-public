@@ -2,13 +2,16 @@ package com.codecool.vizsgaremekvaccinedatabase.controller;
 
 import com.codecool.vizsgaremekvaccinedatabase.model.VaccineData;
 import com.codecool.vizsgaremekvaccinedatabase.service.VaccineDataService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/vaccine_data")
+@RequestMapping(value = "/vaccinedata")
 public class VaccineDataController {
 
     VaccineDataService service;
@@ -18,13 +21,19 @@ public class VaccineDataController {
     }
 
     @PostMapping
-    public VaccineData save(@RequestBody VaccineData s) {
-        return service.save(s);
+    public ResponseEntity<VaccineData> save(@Valid @RequestBody VaccineData s, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(service.save(s));
     }
 
     @PutMapping
-    public VaccineData update(@RequestBody VaccineData s) {
-        return service.update(s);
+    public ResponseEntity<VaccineData> update(@Valid @RequestBody VaccineData s, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(service.update(s));
     }
 
     @GetMapping

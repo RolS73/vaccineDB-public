@@ -15,10 +15,10 @@ import java.util.Optional;
 @Transactional
 public class VaccineDataService {
 
-    VaccineDataRepository repository;
-    VaccineRepository vaccineRepository;
-    VaccinationPointRepository vaccinationPointRepository;
-    PatientRepository patientRepository;
+    private final VaccineDataRepository repository;
+    private final VaccineRepository vaccineRepository;
+    private final VaccinationPointRepository vaccinationPointRepository;
+    private final PatientRepository patientRepository;
 
     public VaccineDataService(VaccineDataRepository repository, VaccineRepository vaccineRepository, VaccinationPointRepository vaccinationPointRepository, PatientRepository patientRepository) {
         this.repository = repository;

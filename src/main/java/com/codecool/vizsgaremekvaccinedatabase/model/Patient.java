@@ -1,6 +1,10 @@
 package com.codecool.vizsgaremekvaccinedatabase.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 public class Patient {
@@ -9,17 +13,21 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @NotBlank
+    @NotNull
     private String fullName;
 
+    @Min(0)
     private int age;
 
+    @NotBlank
     private String gender;
 
     private boolean isVaccinated;
 
     private String vaccinationDate;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private VaccineData vaccine;
 
     public Patient() {}
@@ -29,6 +37,13 @@ public class Patient {
         this.age = age;
         this.gender = gender;
     }
+
+    /*public Patient(Long id, String fullName, int age, String gender) {
+        this.id = id;
+        this.fullName = fullName;
+        this.age = age;
+        this.gender = gender;
+    }*/
 
     public Long getId() {
         return id;
@@ -96,5 +111,18 @@ public class Patient {
                 ", vaccinationDate='" + vaccinationDate + '\'' +
                 ", vaccine=" + vaccine +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Patient patient = (Patient) o;
+        return age == patient.age && isVaccinated == patient.isVaccinated && fullName.equals(patient.fullName) && gender.equals(patient.gender) && Objects.equals(vaccinationDate, patient.vaccinationDate) && Objects.equals(vaccine, patient.vaccine);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fullName, age, gender, isVaccinated, vaccinationDate, vaccine);
     }
 }

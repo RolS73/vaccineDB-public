@@ -3,6 +3,8 @@ package com.codecool.vizsgaremekvaccinedatabase.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class Vaccine {
@@ -11,7 +13,14 @@ public class Vaccine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    public Vaccine() {}
+    String uuid = UUID.randomUUID().toString();
+
+    public Vaccine(){}
+
+    public Vaccine(VaccineData vaccineData) {
+        this.vaccineData = vaccineData;
+        this.uuid = UUID.randomUUID().toString();
+    }
 
     @ManyToOne()
     VaccineData vaccineData;
@@ -43,5 +52,35 @@ public class Vaccine {
 
     public void setVaccinationPoint(VaccinationPoint vaccinationPoint) {
         this.vaccinationPoint = vaccinationPoint;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    @Override
+    public String toString() {
+        return "Vaccine{" +
+                "id=" + id +
+                ", vaccineData=" + vaccineData +
+                ", vaccinationPoint=" + vaccinationPoint +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vaccine vaccine = (Vaccine) o;
+        return Objects.equals(vaccineData, vaccine.vaccineData) && Objects.equals(vaccinationPoint, vaccine.vaccinationPoint);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(vaccineData, vaccinationPoint);
     }
 }

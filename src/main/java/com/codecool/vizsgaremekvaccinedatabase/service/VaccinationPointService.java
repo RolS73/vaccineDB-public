@@ -10,7 +10,7 @@ import java.util.Optional;
 @Service
 public class VaccinationPointService {
 
-    VaccinationPointRepository repository;
+    private final VaccinationPointRepository repository;
 
     public VaccinationPointService(VaccinationPointRepository repository) {
         this.repository = repository;

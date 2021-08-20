@@ -2,8 +2,11 @@ package com.codecool.vizsgaremekvaccinedatabase.controller;
 
 import com.codecool.vizsgaremekvaccinedatabase.model.Vaccine;
 import com.codecool.vizsgaremekvaccinedatabase.service.VaccineService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,13 +21,19 @@ public class VaccineController {
     }
 
     @PostMapping
-    public Vaccine save(@RequestBody Vaccine s) {
-        return service.save(s);
+    public ResponseEntity<Vaccine> save(@Valid @RequestBody Vaccine s, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(service.save(s));
     }
 
     @PutMapping
-    public Vaccine update(@RequestBody Vaccine s) {
-        return service.update(s);
+    public ResponseEntity<Vaccine> update(@RequestBody Vaccine s, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(service.update(s));
     }
 
     @GetMapping

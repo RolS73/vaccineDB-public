@@ -35,7 +35,7 @@ public class PatientUnitTest {
     private PatientService patientService;
 
     @Test
-    public void whenGetFindAllShouldReturnListOfPatientsTest() throws Exception {
+    public void whenGet_FindAll_ShouldReturnListOfPatients() throws Exception {
         List<Patient> patients = List.of(
                 new Patient("János Pál", 28, "Male"),
                 new Patient("Dale Crimson", 30, "Male")
@@ -45,31 +45,31 @@ public class PatientUnitTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$[0].fullName").value("János Pál"))
-                .andExpect(jsonPath("$[0].age").value(28))
-                .andExpect(jsonPath("$[0].gender").value("Male"))
-                .andExpect(jsonPath("$[1].fullName").value("Dale Crimson"))
-                .andExpect(jsonPath("$[1].age").value(30))
-                .andExpect(jsonPath("$[1].gender").value("Male"));
+                .andExpect(jsonPath("$[0].fullName").value(patients.get(0).getFullName()))
+                .andExpect(jsonPath("$[0].age").value(patients.get(0).getAge()))
+                .andExpect(jsonPath("$[0].gender").value(patients.get(0).getGender()))
+                .andExpect(jsonPath("$[1].fullName").value(patients.get(1).getFullName()))
+                .andExpect(jsonPath("$[1].age").value(patients.get(1).getAge()))
+                .andExpect(jsonPath("$[1].gender").value(patients.get(1).getGender()));
     }
 
     @Test
-    public void whenPostSavePatientReturnPatient() throws Exception {
+    public void whenPost_newPatient_saveAndReturnPatient() throws Exception {
         Patient patient = new Patient("János Pál", 28, "Male");
         when(patientService.save(any(Patient.class))).thenReturn(patient);
         this.mockMvc.perform(MockMvcRequestBuilders
                 .post("/patient")
-                .content(objectMapper.writeValueAsString(new Patient("János Pál", 28, "Male")))
+                .content(objectMapper.writeValueAsString(patient))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$.fullName").value("János Pál"))
-                .andExpect(jsonPath("$.age").value(28))
-                .andExpect(jsonPath("$.gender").value("Male"));
+                .andExpect(jsonPath("$.fullName").value(patient.getFullName()))
+                .andExpect(jsonPath("$.age").value(patient.getAge()))
+                .andExpect(jsonPath("$.gender").value(patient.getGender()));
     }
 
     @Test
-    public void whenPut_savePatient_ReturnPatient() throws Exception {
+    public void whenPut_existingPatient_updateAndReturnPatient() throws Exception {
         Patient patient = new Patient("János Pál", 28, "Male");
         when(patientService.save(any(Patient.class))).thenReturn(patient);
 
@@ -99,11 +99,13 @@ public class PatientUnitTest {
     }
 
     @Test
-    public void whenGetFindByIdReturnPatient() throws Exception {
+    public void whenGet_FindById_returnPatient() throws Exception {
         Patient patient1 = new Patient("János Pál", 28, "Male");
         Patient patient2 = new Patient("Dale Crimson", 30, "Male");
+
         when(patientService.findById(1L)).thenReturn(java.util.Optional.of(patient1));
         when(patientService.findById(2L)).thenReturn(java.util.Optional.of(patient2));
+
         this.mockMvc.perform(get("/patient/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -119,11 +121,49 @@ public class PatientUnitTest {
     }
 
     @Test
-    public void whenDeleteByIdStatusIsOk() throws Exception {
+    public void whenDelete_ById_StatusIsOk() throws Exception {
         this.mockMvc.perform(delete("/patient/1"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void whenPost_newPatientWithInvalidData_returnStatusBadRequest() throws Exception {
+        Patient patient = new Patient("János Pál", -1, "Male");
 
+        when(patientService.save(any(Patient.class))).thenReturn(patient);
+        this.mockMvc.perform(MockMvcRequestBuilders
+                .post("/patient")
+                .content(objectMapper.writeValueAsString(patient))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void whenPut_newPatientWithInvalidData_returnStatusBadRequest() throws Exception {
+        Patient patient = new Patient("János Pál", 28, "Male");
+        when(patientService.save(any(Patient.class))).thenReturn(patient);
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                .post("/patient")
+                .content(objectMapper.writeValueAsString(patient))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.fullName").value(patient.getFullName()))
+                .andExpect(jsonPath("$.age").value(patient.getAge()))
+                .andExpect(jsonPath("$.gender").value(patient.getGender()));
+
+        Patient patientUpdated = new Patient("János Pál István", -1, "Male");
+        patientUpdated.setId(1L);
+        when(patientService.update(any(Patient.class))).thenReturn(patientUpdated);
+
+        this.mockMvc.perform( MockMvcRequestBuilders
+                .put("/patient")
+                .content(objectMapper.writeValueAsString(patientUpdated))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 }

@@ -27,8 +27,8 @@ public class Patient {
 
     private String vaccinationDate;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private VaccineData vaccine;
+    @ManyToOne
+    Vaccine vaccine;
 
     public Patient() {}
 
@@ -38,12 +38,13 @@ public class Patient {
         this.gender = gender;
     }
 
-    /*public Patient(Long id, String fullName, int age, String gender) {
-        this.id = id;
-        this.fullName = fullName;
-        this.age = age;
-        this.gender = gender;
-    }*/
+    public Vaccine getVaccine() {
+        return vaccine;
+    }
+
+    public void setVaccine(Vaccine vaccine) {
+        this.vaccine = vaccine;
+    }
 
     public Long getId() {
         return id;
@@ -85,32 +86,12 @@ public class Patient {
         this.vaccinationDate = vaccinationDate;
     }
 
-    public VaccineData getVaccine() {
-        return vaccine;
-    }
-
-    public void setVaccine(VaccineData vaccine) {
-        this.vaccine = vaccine;
-    }
-
     public String getGender() {
         return gender;
     }
 
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    @Override
-    public String toString() {
-        return "Patient{" +
-                "fullName='" + fullName + '\'' +
-                ", age=" + age +
-                ", gender=" + gender +
-                ", isVaccinated=" + isVaccinated +
-                ", vaccinationDate='" + vaccinationDate + '\'' +
-                ", vaccine=" + vaccine +
-                '}';
     }
 
     @Override
@@ -124,5 +105,18 @@ public class Patient {
     @Override
     public int hashCode() {
         return Objects.hash(fullName, age, gender, isVaccinated, vaccinationDate, vaccine);
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", age=" + age +
+                ", gender='" + gender + '\'' +
+                ", isVaccinated=" + isVaccinated +
+                ", vaccinationDate='" + vaccinationDate + '\'' +
+                ", vaccine=" + vaccine +
+                '}';
     }
 }

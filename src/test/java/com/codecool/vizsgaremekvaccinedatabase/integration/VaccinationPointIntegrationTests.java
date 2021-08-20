@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -135,5 +133,32 @@ public class VaccinationPointIntegrationTests {
         for(int i = 0; i< testVaccinationPoints.size(); i++){
             assertEquals(testVaccinationPoints.get(i), remainingVaccinationPoints.get(i));
         }
+    }
+
+    @Test
+    public void saveVaccinationPoint_withInvalidData_shouldReturnBadRequest() {
+        VaccinationPoint vaccinationPoint = new VaccinationPoint(
+                null,
+                "Pest Megye",
+                "1115 Budapest",
+                "Tétényi út 12-16. „K” épület földszint 24, 25, 26 és 27-es számú ambulancia");
+
+        ResponseEntity<VaccinationPoint> postResponse = testRestTemplate.postForEntity(baseUrl, vaccinationPoint, VaccinationPoint.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, postResponse.getStatusCode());
+    }
+
+    @Test
+    public void updateVaccinationPoint_withInvalidData_shouldReturnBadRequest() {
+        VaccinationPoint vaccinationPoint = new VaccinationPoint(
+                "Szent Imre Egyetemi Oktatókórház",
+                "Pest Megye",
+                null,
+                "Tétényi út 12-16. „K” épület földszint 24, 25, 26 és 27-es számú ambulancia");
+
+        var httpEntity = createHttpEntityWithMediatypeJson(vaccinationPoint);
+        ResponseEntity<VaccinationPoint> putResponse = testRestTemplate.exchange(baseUrl, HttpMethod.PUT, httpEntity, VaccinationPoint.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, putResponse.getStatusCode());
     }
 }

@@ -35,50 +35,59 @@ public class VaccineUnitTest {
     private VaccineService vaccineService;
 
     @Test
-    public void whenGetFindAllShouldReturnListOfVaccinesTest() throws Exception {
+    public void whenGet_findAll_returnListOfVaccines() throws Exception {
         List<Vaccine> vaccines = List.of(
-                new Vaccine(),
-                new Vaccine()
+                new Vaccine("Pfizer-BioNtech", 2, 18),
+                new Vaccine("Moderna", 2, 18)
         );
         when(vaccineService.findAll()).thenReturn(vaccines);
         this.mockMvc.perform(get("/vaccine"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].uuid").value(vaccines.get(0).getUuid()))
-                .andExpect(jsonPath("$[1].uuid").value(vaccines.get(1).getUuid()));
+                .andExpect(jsonPath("$[0].name").value(vaccines.get(0).getName()))
+                .andExpect(jsonPath("$[0].dosesNeeded").value(vaccines.get(0).getDosesNeeded()))
+                .andExpect(jsonPath("$[0].minAge").value(vaccines.get(0).getMinAge()))
+
+                .andExpect(jsonPath("$[1].name").value(vaccines.get(1).getName()))
+                .andExpect(jsonPath("$[1].dosesNeeded").value(vaccines.get(1).getDosesNeeded()))
+                .andExpect(jsonPath("$[1].minAge").value(vaccines.get(1).getMinAge()));
     }
 
     @Test
-    public void whenPostSaveVaccineReturnVaccine() throws Exception {
-        Vaccine vaccine = new Vaccine();
+    public void whenPost_newVaccine_returnSavedVaccine() throws Exception {
+        Vaccine vaccine = new Vaccine("Moderna", 2, 18);
+
         when(vaccineService.save(any(Vaccine.class))).thenReturn(vaccine);
+
         this.mockMvc.perform(MockMvcRequestBuilders
                 .post("/vaccine")
-                .content(objectMapper.writeValueAsString(new Vaccine()))
+                .content(objectMapper.writeValueAsString(vaccine))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$.uuid").value(vaccine.getUuid()));
+                .andExpect(jsonPath("$.name").value(vaccine.getName()))
+                .andExpect(jsonPath("$.dosesNeeded").value(vaccine.getDosesNeeded()))
+                .andExpect(jsonPath("$.minAge").value(vaccine.getMinAge()));
     }
 
     @Test
-    public void whenPut_saveVaccine_ReturnVaccine() throws Exception {
-        Vaccine vaccine = new Vaccine();
+    public void whenPut_existingVaccineWithNewData_updateAndReturnVaccine() throws Exception {
+        Vaccine vaccine = new Vaccine("Moderna", 2, 18);
 
         when(vaccineService.save(any(Vaccine.class))).thenReturn(vaccine);
 
-
         this.mockMvc.perform(MockMvcRequestBuilders
                 .post("/vaccine")
-                .content(objectMapper.writeValueAsString(new Vaccine()))
+                .content(objectMapper.writeValueAsString(vaccine))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$.uuid").value(vaccine.getUuid()));
+                .andExpect(jsonPath("$.name").value(vaccine.getName()))
+                .andExpect(jsonPath("$.dosesNeeded").value(vaccine.getDosesNeeded()))
+                .andExpect(jsonPath("$.minAge").value(vaccine.getMinAge()));
 
-        Vaccine vaccineUpdated = new Vaccine();
+        Vaccine vaccineUpdated = new Vaccine("Moderna", 3, 18);
         vaccineUpdated.setId(1L);
-        vaccineUpdated.setUuid("3abc");
         when(vaccineService.update(any(Vaccine.class))).thenReturn(vaccineUpdated);
 
         this.mockMvc.perform( MockMvcRequestBuilders
@@ -87,23 +96,31 @@ public class VaccineUnitTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.uuid").value(vaccineUpdated.getUuid()));
+                .andExpect(jsonPath("$.name").value(vaccineUpdated.getName()))
+                .andExpect(jsonPath("$.dosesNeeded").value(vaccineUpdated.getDosesNeeded()))
+                .andExpect(jsonPath("$.minAge").value(vaccineUpdated.getMinAge()));
     }
 
     @Test
-    public void whenGetFindByIdReturnVaccine() throws Exception {
-        Vaccine vaccine1 = new Vaccine();
-        Vaccine vaccine2 = new Vaccine();
+    public void whenGet_findById_returnCorrectVaccine() throws Exception {
+        Vaccine vaccine1 = new Vaccine("Pfizer-BioNtech", 2, 18);
+        Vaccine vaccine2 = new Vaccine("Moderna", 2, 18);
+
         when(vaccineService.findById(1L)).thenReturn(java.util.Optional.of(vaccine1));
         when(vaccineService.findById(2L)).thenReturn(java.util.Optional.of(vaccine2));
+
         this.mockMvc.perform(get("/vaccine/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.uuid").value(vaccine1.getUuid()));
+                .andExpect(jsonPath("$.name").value(vaccine1.getName()))
+                .andExpect(jsonPath("$.dosesNeeded").value(vaccine1.getDosesNeeded()))
+                .andExpect(jsonPath("$.minAge").value(vaccine1.getMinAge()));
         this.mockMvc.perform(get("/vaccine/2"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.uuid").value(vaccine2.getUuid()));
+                .andExpect(jsonPath("$.name").value(vaccine2.getName()))
+                .andExpect(jsonPath("$.dosesNeeded").value(vaccine2.getDosesNeeded()))
+                .andExpect(jsonPath("$.minAge").value(vaccine2.getMinAge()));
     }
 
     @Test
@@ -113,5 +130,45 @@ public class VaccineUnitTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void whenPost_newVaccineWithInvalidData_StatusBadRequest() throws Exception {
+        Vaccine vaccine = new Vaccine("Moderna", 0, 18);
 
+        when(vaccineService.save(any(Vaccine.class))).thenReturn(vaccine);
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                .post("/vaccine")
+                .content(objectMapper.writeValueAsString(vaccine))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void whenPut_withInvalidFieldData_StatusBadRequest() throws Exception {
+        Vaccine vaccine = new Vaccine("Moderna", 2, 18);
+
+        when(vaccineService.save(any(Vaccine.class))).thenReturn(vaccine);
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                .post("/vaccine")
+                .content(objectMapper.writeValueAsString(vaccine))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.name").value(vaccine.getName()))
+                .andExpect(jsonPath("$.dosesNeeded").value(vaccine.getDosesNeeded()))
+                .andExpect(jsonPath("$.minAge").value(vaccine.getMinAge()));
+
+        Vaccine vaccineUpdated = new Vaccine("Moderna", 0, 18);
+        vaccineUpdated.setId(1L);
+        when(vaccineService.update(any(Vaccine.class))).thenReturn(vaccineUpdated);
+
+        this.mockMvc.perform( MockMvcRequestBuilders
+                .put("/vaccine")
+                .content(objectMapper.writeValueAsString(vaccineUpdated))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 }

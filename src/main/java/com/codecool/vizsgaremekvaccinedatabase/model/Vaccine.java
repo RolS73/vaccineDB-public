@@ -3,8 +3,9 @@ package com.codecool.vizsgaremekvaccinedatabase.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 public class Vaccine {
@@ -13,22 +14,62 @@ public class Vaccine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String uuid = UUID.randomUUID().toString();
+    @NotBlank
+    String name;
+
+    @Min(1)
+    int dosesNeeded;
+
+    @Min(0)
+    int minAge;
 
     public Vaccine(){}
 
-    public Vaccine(VaccineData vaccineData) {
-        this.vaccineData = vaccineData;
-        this.uuid = UUID.randomUUID().toString();
+    public Vaccine(String name, int dosesNeeded, int minAge) {
+        this.name = name;
+        this.dosesNeeded = dosesNeeded;
+        this.minAge = minAge;
     }
 
     @ManyToOne()
-    VaccineData vaccineData;
+    @JsonIgnore
+    Patient patient;
 
     @ManyToOne()
     @JsonIgnore
     VaccinationPoint vaccinationPoint;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getDosesNeeded() {
+        return dosesNeeded;
+    }
+
+    public void setDosesNeeded(int dosesNeeded) {
+        this.dosesNeeded = dosesNeeded;
+    }
+
+    public int getMinAge() {
+        return minAge;
+    }
+
+    public void setMinAge(int minAge) {
+        this.minAge = minAge;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
 
     public Long getId() {
         return id;
@@ -36,14 +77,6 @@ public class Vaccine {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public VaccineData getVaccineData() {
-        return vaccineData;
-    }
-
-    public void setVaccineData(VaccineData vaccineData) {
-        this.vaccineData = vaccineData;
     }
 
     public VaccinationPoint getVaccinationPoint() {
@@ -54,33 +87,28 @@ public class Vaccine {
         this.vaccinationPoint = vaccinationPoint;
     }
 
-    public String getUuid() {
-        return uuid;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vaccine vaccine = (Vaccine) o;
+        return dosesNeeded == vaccine.dosesNeeded && minAge == vaccine.minAge && name.equals(vaccine.name) && Objects.equals(patient, vaccine.patient) && Objects.equals(vaccinationPoint, vaccine.vaccinationPoint);
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, dosesNeeded, minAge, patient, vaccinationPoint);
     }
 
     @Override
     public String toString() {
         return "Vaccine{" +
                 "id=" + id +
-                ", vaccineData=" + vaccineData +
+                ", name='" + name + '\'' +
+                ", dosesNeeded=" + dosesNeeded +
+                ", minAge=" + minAge +
+                ", patient=" + patient +
                 ", vaccinationPoint=" + vaccinationPoint +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Vaccine vaccine = (Vaccine) o;
-        return Objects.equals(vaccineData, vaccine.vaccineData) && Objects.equals(vaccinationPoint, vaccine.vaccinationPoint);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(vaccineData, vaccinationPoint);
     }
 }

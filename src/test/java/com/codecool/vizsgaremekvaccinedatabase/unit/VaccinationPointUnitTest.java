@@ -129,7 +129,7 @@ public class VaccinationPointUnitTest {
     }
 
     @Test
-    public void whenGetFindByIdReturnVaccinationPoint() throws Exception {
+    public void whenGet_findById_returnVaccinationPoint() throws Exception {
         VaccinationPoint vaccinationPoint1 = new VaccinationPoint(
                 "Szent Borbála Kórház",
                 "Komárom-Esztergom Megye",
@@ -167,5 +167,58 @@ public class VaccinationPointUnitTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void whenPost_vaccinationPointWithInvalidData_statusBadRequest() throws Exception {
+        VaccinationPoint vaccinationPoint = new VaccinationPoint(
+                "Szent Borbála Kórház",
+                "Komárom-Esztergom Megye",
+                null,
+                "Dózsa Gy. út 77., \"H\" épület földszint");
 
+        when(vaccinationPointService.save(any(VaccinationPoint.class))).thenReturn(vaccinationPoint);
+        this.mockMvc.perform(MockMvcRequestBuilders
+                .post("/vaccinationpoint")
+                .content(objectMapper.writeValueAsString(vaccinationPoint))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void whenPut_vaccinationPointWithInvalidData_statusBadRequest() throws Exception {
+        VaccinationPoint vaccinationPoint = new VaccinationPoint(
+                "Szent Borbála Kórház",
+                "Komárom-Esztergom Megye",
+                "2800 Tatabánya",
+                "Dózsa Gy. út 77., \"H\" épület földszint");
+
+        when(vaccinationPointService.save(any(VaccinationPoint.class))).thenReturn(vaccinationPoint);
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                .post("/vaccinationpoint")
+                .content(objectMapper.writeValueAsString(vaccinationPoint))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.name").value(vaccinationPoint.getName()))
+                .andExpect(jsonPath("$.region").value(vaccinationPoint.getRegion()))
+                .andExpect(jsonPath("$.city").value(vaccinationPoint.getCity()))
+                .andExpect(jsonPath("$.address").value(vaccinationPoint.getAddress()));
+
+        VaccinationPoint vaccinationPointUpdated = new VaccinationPoint(
+                "Szent Borbála Kórház",
+                "Komárom-Eszmeraldagom Megye",
+                null,
+                "Dózsa Gy. út 77., \"H\" épület földszint");
+
+        vaccinationPointUpdated.setId(1L);
+        when(vaccinationPointService.update(any(VaccinationPoint.class))).thenReturn(vaccinationPointUpdated);
+
+        this.mockMvc.perform( MockMvcRequestBuilders
+                .put("/vaccinationpoint")
+                .content(objectMapper.writeValueAsString(vaccinationPointUpdated))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 }

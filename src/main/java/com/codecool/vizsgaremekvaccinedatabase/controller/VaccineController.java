@@ -29,7 +29,7 @@ public class VaccineController {
     }
 
     @PutMapping
-    public ResponseEntity<Vaccine> update(@RequestBody Vaccine s, BindingResult bindingResult) {
+    public ResponseEntity<Vaccine> update(@Valid @RequestBody Vaccine s, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }

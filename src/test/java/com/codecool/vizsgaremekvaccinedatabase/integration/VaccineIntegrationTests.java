@@ -1,16 +1,13 @@
 package com.codecool.vizsgaremekvaccinedatabase.integration;
 
 import com.codecool.vizsgaremekvaccinedatabase.model.Vaccine;
-import com.codecool.vizsgaremekvaccinedatabase.model.VaccineData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -45,7 +42,7 @@ public class VaccineIntegrationTests {
 
     @Test
     public void addNewVaccine_emptyDatabase_shouldReturnSameVaccine() {
-        Vaccine testVaccine = new Vaccine();
+        Vaccine testVaccine = new Vaccine("Moderna", 2, 18);
 
         Vaccine result = testRestTemplate.postForObject(baseUrl, testVaccine, Vaccine.class);
         assertEquals(testVaccine, result);
@@ -59,33 +56,33 @@ public class VaccineIntegrationTests {
 
     @Test
     public void getVaccineById_withOnePostedVaccine_returnsVaccineWithSameId() {
-        Vaccine testVaccine = new Vaccine();
+        Vaccine testVaccine = new Vaccine("Moderna", 2, 18);
+
         testVaccine = testRestTemplate.postForObject(baseUrl, testVaccine, Vaccine.class);
+
         Vaccine result = testRestTemplate.getForObject(baseUrl + "/" + testVaccine.getId(), Vaccine.class);
-        assertEquals(testVaccine.getId(), result.getId());
+        assertEquals(testVaccine, result);
     }
 
     @Test
     public void updateVaccine_withOnePostedVaccine_returnsUpdatedVaccine() {
-        Vaccine testVaccine = new Vaccine();
-        VaccineData testVaccineData = new VaccineData("Moderna", 2, 18);
-        VaccineData testVaccineData2 = new VaccineData("Pfzer-BioNTech", 2, 18);
+        Vaccine testVaccine = new Vaccine("Moderna", 2, 18);
 
-        testVaccine.setVaccineData(testVaccineData);
         testVaccine = testRestTemplate.postForObject(baseUrl, testVaccine, Vaccine.class);
 
-        testVaccine.setVaccineData(testVaccineData2);
+        testVaccine.setDosesNeeded(2);
+
         testRestTemplate.put(baseUrl, testVaccine);
         Vaccine updatedVaccine = testRestTemplate.getForObject(baseUrl + "/" + testVaccine.getId(), Vaccine.class);
 
-        assertEquals(testVaccine, updatedVaccine);
+        assertEquals(testVaccine.getDosesNeeded(), updatedVaccine.getDosesNeeded());
     }
 
     @Test
     public void deleteVaccineById_withSomePostedVaccines_getAllShouldReturnRemainingVaccines() {
-        Vaccine testVaccine1 = new Vaccine();
-        Vaccine testVaccine2 = new Vaccine();
-        Vaccine testVaccine3 = new Vaccine();
+        Vaccine testVaccine1 = new Vaccine("Pfizer-BioNtech", 2, 18);
+        Vaccine testVaccine2 = new Vaccine("Moderna", 2, 18);
+        Vaccine testVaccine3 = new Vaccine("Szputnyik", 2, 18);
         List<Vaccine> testVaccines = new ArrayList<>();
         testVaccines.add(testVaccine1);
         testVaccines.add(testVaccine2);
@@ -104,5 +101,24 @@ public class VaccineIntegrationTests {
         for(int i = 0; i< testVaccines.size(); i++){
             assertEquals(testVaccines.get(i), remainingVaccines.get(i));
         }
+    }
+
+    @Test
+    public void saveVaccine_withInvalidData_shouldReturnBadRequest() {
+        Vaccine vaccine = new Vaccine("Pfizer-BioNtech", 0, 18);
+
+        ResponseEntity<Vaccine> postResponse = testRestTemplate.postForEntity(baseUrl, vaccine, Vaccine.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, postResponse.getStatusCode());
+    }
+
+    @Test
+    public void updateVaccinationPoint_withInvalidData_shouldReturnBadRequest() {
+        Vaccine vaccine = new Vaccine(null, 2, 18);;
+
+        var httpEntity = createHttpEntityWithMediatypeJson(vaccine);
+        ResponseEntity<Vaccine> putResponse = testRestTemplate.exchange(baseUrl, HttpMethod.PUT, httpEntity, Vaccine.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, putResponse.getStatusCode());
     }
 }

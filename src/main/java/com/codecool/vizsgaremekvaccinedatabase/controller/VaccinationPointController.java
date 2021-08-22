@@ -50,4 +50,11 @@ public class VaccinationPointController {
     public void deleteById(@PathVariable Long id) {
         service.deleteById(id);
     }
+
+    @GetMapping("/{vaccinationPointId}/{vaccineName}/{patientId}")
+    public void injectPatientWithVaccine(@PathVariable Long vaccinationPointId,
+                                         @PathVariable String vaccineName,
+                                         @PathVariable Long patientId) {
+        service.injectPatientWithVaccineFromStock(vaccinationPointId, vaccineName, patientId);
+    }
 }

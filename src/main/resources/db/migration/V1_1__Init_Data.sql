@@ -12,7 +12,7 @@ INSERT INTO vaccine(name, doses_needed, min_age) VALUES ('Szputnyik', 2, 18);
 
 INSERT INTO PATIENT (full_name, age, gender, is_vaccinated) VALUES ('Johan Lassos', 21, 'MALE', false);
 INSERT INTO PATIENT (full_name, age, gender, is_vaccinated) VALUES ('Amanda Fleirmann', 32, 'FEMALE', false);
-INSERT INTO PATIENT (full_name, age, gender, is_vaccinated, vaccine_id, vaccination_date) VALUES ('Tamás Déli', 50, 'MALE', true, 1, '2021-02-12');
+INSERT INTO PATIENT (full_name, age, gender, is_vaccinated, vaccine_doses_received, vaccine_id, vaccination_date) VALUES ('Tamás Déli', 50, 'MALE', true, 1, 1, '2021-02-12');
 
 INSERT INTO Vaccination_point (name, region, city, address) VALUES ('Szent Borbála Kórház', 'Komárom-Esztergom Megye', '2800 Tatabánya', 'Dózsa Gy. út 77., "H" épület földszint');
 INSERT INTO Vaccination_point (name, region, city, address) VALUES ('Szent György Egyetemi Oktató Kórház', 'Fejér Megye', '8000 Székesfehérvár', 'Seregélyesi út 3. Rendelőintézet II. szint');

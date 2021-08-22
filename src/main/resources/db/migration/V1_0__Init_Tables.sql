@@ -1,5 +1,3 @@
-
-
 drop table if exists patient CASCADE;
 
 drop table if exists vaccination_point CASCADE;
@@ -15,6 +13,7 @@ create table patient (
                          gender varchar(255),
                          is_vaccinated boolean not null,
                          vaccination_date varchar(255),
+                         vaccine_doses_received int default 0,
                          vaccine_id bigint,
                          primary key (id)
 );

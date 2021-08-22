@@ -25,6 +25,9 @@ public class Patient {
 
     private boolean isVaccinated;
 
+    @Column(columnDefinition = "int default 0")
+    private int vaccineDosesReceived;
+
     private String vaccinationDate;
 
     @ManyToOne
@@ -64,6 +67,14 @@ public class Patient {
 
     public int getAge() {
         return age;
+    }
+
+    public int getVaccineDosesReceived() {
+        return vaccineDosesReceived;
+    }
+
+    public void setVaccineDosesReceived(int dosesReceived) {
+        this.vaccineDosesReceived = dosesReceived;
     }
 
     public void setAge(int age) {

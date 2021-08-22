@@ -1,18 +1,15 @@
 VaccineDB is a Spring application to help management and documentation of the available vaccines in registered vaccination points, and also to help track of patients that are to be or already were administered one of the accessible vaccines.
+The application also has Docker support, to build and run an image from it simply run the "vaccineDB_build" and "vaccineDB_run" files respectively.
 
-
-The application has 4 main model classes, these are:
+The application has 3 main model classes, these are:
 -Patient
--VaccineData
 -Vaccine
 -Vaccination Point
 
 
 The "Patient" class is responsible for storing the basic data of persons applied for vaccination, and also the type of vaccine they have been administered with.
 
-The "VaccineData" class stores the name and basic parameters of usage for a registered vaccine. (Like how many doses are needed, and what is the minimum age for safe administeration).
-
-The "Vaccine" class simply stores an ID and a reference to the previously discussed VaccineData, it serves as a simple way to keep track of inventory.
+The "Vaccine" class stores the data of all the available vaccines and their data (the name, dosage and minimum age for safe injection).
 
 The "Vaccination Point" class is to register the locations where vaccines are stocked.
 
@@ -25,12 +22,6 @@ PUT			​/vaccine			-Updates an entry or saves a new one with input data.
 POST ​			/vaccine			-Registers a new vaccine
 GET			​/vaccine​/{id}			-Returns the vaccine of the input id.
 DELETE			​/vaccines/{id}			-Deletes the vaccine of the input id.
-
-GET 			​/vaccine_data			-Lists every available Vaccine type.
-PUT			​/vaccine_data			-Updates an entry or saves a new one with input data.
-POST 			/vaccine_data			-Inserts a new vaccine type into the database.
-GET 			/vaccine_data​/{id}		-Returns the vaccine type with the selected id.
-DELETE 			/vaccine_data​/{id}		-Deletes the vaccine type with the selected id, and removes all instances/references to it in the database.
 
 GET			/vaccinationpoint		-Lists every registered vaccination point.
 PUT			​/vaccinationpoint		-Updates an entry or saves a new one with input data.	
